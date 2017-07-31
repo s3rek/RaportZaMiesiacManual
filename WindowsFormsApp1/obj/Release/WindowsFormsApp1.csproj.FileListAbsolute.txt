@@ -6,3 +6,4 @@ C:\Users\Dell\Documents\Visual Studio 2017\Projects\WindowsFormsApp1\WindowsForm
 C:\Users\Dell\Documents\Visual Studio 2017\Projects\WindowsFormsApp1\WindowsFormsApp1\obj\Release\WindowsFormsApp1.csproj.GenerateResource.Cache
 C:\Users\Dell\Documents\Visual Studio 2017\Projects\WindowsFormsApp1\WindowsFormsApp1\obj\Release\WindowsFormsApp1.exe
 C:\Users\Dell\Documents\Visual Studio 2017\Projects\WindowsFormsApp1\WindowsFormsApp1\obj\Release\WindowsFormsApp1.pdb
+C:\Users\Dell\Documents\Visual Studio 2017\Projects\WindowsFormsApp1\WindowsFormsApp1\obj\Release\WindowsFormsApp1.csprojResolveAssemblyReference.cache

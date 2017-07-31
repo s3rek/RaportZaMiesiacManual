@@ -73,7 +73,8 @@ namespace WindowsFormsApp1
                     using (SqlCommand cmd = new SqlCommand(query5))
                     {
                         cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
+                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
+                        //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
                         cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
                         using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
                         {
@@ -83,7 +84,8 @@ namespace WindowsFormsApp1
                     using (SqlCommand cmd = new SqlCommand(query4))
                     {
                         cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
+                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
+                        //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
                         cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
                         using (SqlDataAdapter mda2 = new SqlDataAdapter(cmd))
                         {
@@ -93,7 +95,8 @@ namespace WindowsFormsApp1
                     using (SqlCommand cmd = new SqlCommand(query6))
                     {
                         cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
+                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
+                        //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
                         cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
                         using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
                         {
@@ -103,7 +106,8 @@ namespace WindowsFormsApp1
                     using (SqlCommand cmd = new SqlCommand(query7))
                     {
                         cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
+                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
+                        //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
                         cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
                         using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
                         {
@@ -190,7 +194,7 @@ namespace WindowsFormsApp1
 
                             using (MailMessage mm = new MailMessage("Unimap.katowice@gmail.com", email))
                             {
-                                mm.Subject = "Miesięczna kontrola bazy - test";
+                                mm.Subject = "Miesięczna kontrola bazy";
                                 mm.IsBodyHtml = true;
                                 mm.Body = string.Format("<p>Witaj! " + row["Imie"] + " " + row["Nazwisko"] + "</p>" + messageBody);
 
@@ -297,6 +301,21 @@ namespace WindowsFormsApp1
 
         }
         private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
 
         }
