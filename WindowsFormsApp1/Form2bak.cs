@@ -70,51 +70,54 @@ namespace WindowsFormsApp1
                     //string query6 = "SELECT dPracePrzyProjektach.ID_uzytkownika, Kalendarz.Data, Kalendarz.Dzien_tygodnia, Kalendarz.Czy_roboczy, Sum(Datediff(ss, dPracePrzyProjektach.Godzina_od, dPracePrzyProjektach.Godzina_do) / 3600.0) AS d_rob FROM Kalendarz LEFT OUTER JOIN dPracePrzyProjektach ON dPracePrzyProjektach.Data=Kalendarz.Data WHERE Datepart(m, Kalendarz.Data) = 5 AND Datepart(yyyy, Kalendarz.Data) = 2017 Group BY dPracePrzyProjektach.ID_uzytkownika, Kalendarz.Data, Kalendarz.Dzien_tygodnia, Kalendarz.Czy_roboczy ORDER BY Kalendarz.Data";
                     string query7 = "SELECT Data, Dzien_tygodnia, Czy_roboczy FROM Kalendarz WHERE Datepart(m, Data) = @Month AND Datepart(yyyy, Data) = @Year";
 
-                    using (SqlCommand cmd = new SqlCommand(query5))
+                    void datefunc(string query, string tabela)
                     {
-                        cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
-                        //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
-                        cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
-                        using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
+                        using (SqlCommand cmd = new SqlCommand(query))
                         {
-                            mda.Fill(ds, "rob_miesiac");
+                            cmd.Connection = conn;
+                            cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
+                            if (numericUpDown1.Text == "12")
+                            {
+                                cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year - 1);
+                            }
+                            else
+                            {
+                                cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
+                            }
+                            //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
+                            using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
+                            {
+                                mda.Fill(ds, tabela);
+                            }
                         }
                     }
-                    using (SqlCommand cmd = new SqlCommand(query4))
-                    {
-                        cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
-                        //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
-                        cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
-                        using (SqlDataAdapter mda2 = new SqlDataAdapter(cmd))
-                        {
-                            mda2.Fill(ds, "miesiac");
-                        }
-                    }
-                    using (SqlCommand cmd = new SqlCommand(query6))
-                    {
-                        cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
-                        //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
-                        cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
-                        using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
-                        {
-                            mda.Fill(ds, "rob_dni");
-                        }
-                    }
+                    //////////////////////////////////////////////////
                     using (SqlCommand cmd = new SqlCommand(query7))
                     {
                         cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
+                        cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month - 1);
+                        if (cmd.Parameters["@Month"].Value.ToString()=="0")
+                        {
+                            cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year - 1);
+                            cmd.Parameters["@Month"].Value=12;
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
+                        }
                         //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
-                        cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
                         using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
                         {
                             mda.Fill(ds, "kalend");
                         }
                     }
-                        foreach (DataRow row in ds.Tables["xUsers"].Rows)
+                            //////////////////////////////////////////////////
+
+                    datefunc(query5, "rob_miesiac");
+                    datefunc(query4, "miesiac");
+                    datefunc(query6, "rob_dni");
+                    //datefunc(query7, "kalend");
+                    foreach (DataRow row in ds.Tables["xUsers"].Rows)
                         {
                             string messageBody = "<font>Poniżej zamieszczono wykaz z bazy za poprzedni miesiąc: </font><br><br>";
                             string htmlTableStart = "<table style=\"border-collapse:collapse; text-align:center;\" >";
@@ -169,12 +172,12 @@ namespace WindowsFormsApp1
                                 double m_godz = Convert.ToDouble(ds.Tables["miesiac"].Rows[0][0]);
                                 if (m_rob > m_godz)
                                 {
-                                    double wydruk = Math.Round(m_rob - m_godz * 2)/ 2;
+                                    double wydruk = Math.Round ((m_rob - m_godz),2);
                                     tekst = "w poprzednim miesiącu masz nadgodziny w liczbie " + wydruk + " godzin";
                                 }
                                 if (m_rob < m_godz)
                                 {
-                                    double wydruk = Math.Round(m_godz - m_rob *2)/ 2;
+                                    double wydruk = Math.Round((m_godz - m_rob), 2);
                                     tekst = "w poprzednim miesiącu masz za mało przepracowanych godzin o " + wydruk + " godziny";
                                 }
                                 if (m_rob == m_godz)
@@ -192,7 +195,7 @@ namespace WindowsFormsApp1
                         {
                             MessageBox.Show("Trying to send email to: " + row["Email"]);
 
-                            using (MailMessage mm = new MailMessage("Unimap.katowice@gmail.com", email))
+                            using (MailMessage mm = new MailMessage("Unimap.katowice@gmail.com", email))//zmienic email dla testow
                             {
                                 mm.Subject = "Miesięczna kontrola bazy";
                                 mm.IsBodyHtml = true;
