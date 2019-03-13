@@ -19,6 +19,7 @@ namespace WindowsFormsApp1
         public Form1()
         {
             InitializeComponent();
+            textBox2.Text =DateTime.Today.Year.ToString();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -26,7 +27,7 @@ namespace WindowsFormsApp1
     
             try
             {
-                string constr = "Data Source=192.168.20.11\\SQLEXPRESS;Initial Catalog=UniManagement; User Id =sa; Password=1234qwer;";
+                string constr = "Data Source=192.168.20.11;Initial Catalog=UniManagement; User Id =sa; Password=unimap;";
                 DataSet ds = new DataSet();
                 DataTable dt = new DataTable();
                 string query2 = "SELECT * FROM xUsers WHERE Email IS NOT NULL";
@@ -76,14 +77,7 @@ namespace WindowsFormsApp1
                         {
                             cmd.Connection = conn;
                             cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
-                            if (numericUpDown1.Text == "12")
-                            {
-                                cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year - 1);
-                            }
-                            else
-                            {
-                                cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
-                            }
+                            cmd.Parameters.AddWithValue("@Year", textBox2.Text);
                             //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
                             using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
                             {
@@ -95,16 +89,8 @@ namespace WindowsFormsApp1
                     using (SqlCommand cmd = new SqlCommand(query7))
                     {
                         cmd.Connection = conn;
-                        cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month - 1);
-                        if (cmd.Parameters["@Month"].Value.ToString()=="0")
-                        {
-                            cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year - 1);
-                            cmd.Parameters["@Month"].Value=12;
-                        }
-                        else
-                        {
-                            cmd.Parameters.AddWithValue("@Year", DateTime.Today.Year);
-                        }
+                        cmd.Parameters.AddWithValue("@Month", numericUpDown1.Text);
+                        cmd.Parameters.AddWithValue("@Year", textBox2.Text);
                         //cmd.Parameters.AddWithValue("@Month", DateTime.Today.Month-1);
                         using (SqlDataAdapter mda = new SqlDataAdapter(cmd))
                         {
@@ -188,14 +174,21 @@ namespace WindowsFormsApp1
                         }
                                 messageBody = messageBody + htmlTableEnd + tekst;
 
-
+                        string emailodb = null;
+                        if (checkBox1.Checked == true)
+                        {
+                            emailodb = textBox3.Text;
+                        }
+                        else
+                        {
+                            emailodb = textBox1.Text;
+                        }
                         string email = textBox1.Text;
-                        //string email = "s3rek92@gmail.com";
                         if (email == row["Email"].ToString())
                         {
                             MessageBox.Show("Trying to send email to: " + row["Email"]);
 
-                            using (MailMessage mm = new MailMessage("Unimap.katowice@gmail.com", email))//zmienic email dla testow
+                            using (MailMessage mm = new MailMessage("Unimap.katowice@gmail.com", emailodb))//zmienic email dla testow
                             {
                                 mm.Subject = "Miesięczna kontrola bazy";
                                 mm.IsBodyHtml = true;
@@ -321,6 +314,43 @@ namespace WindowsFormsApp1
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox2_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                textBox3.Visible = true; 
+            }
+            else
+            {
+                textBox3.Visible = false;
+            }
         }
     }
 }
